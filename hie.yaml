@@ -1,0 +1,13 @@
+cradle:
+  stack:
+    - path: "./src"
+      component: "lambda-launcher:lib"
+
+    - path: "./app/Main.hs"
+      component: "lambda-launcher:exe:lambda-launcher-exe"
+
+    - path: "./app/Paths_lambda_launcher.hs"
+      component: "lambda-launcher:exe:lambda-launcher-exe"
+
+    - path: "./test"
+      component: "lambda-launcher:test:lambda-launcher-test"
