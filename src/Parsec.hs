@@ -1,23 +1,26 @@
-{-# LANGUAGE GADTs          #-}
-{-# LANGUAGE NamedFieldPuns #-}
+{-# LANGUAGE GADTs             #-}
+{-# LANGUAGE NamedFieldPuns    #-}
+{-# LANGUAGE OverloadedStrings #-}
+
 module Parsec where
 
 import           Control.Applicative ((<*))
 import           Control.Monad       (void)
 import           Data.Char
+import           Data.Text           (Text (..), pack)
 import           Text.Parsec         hiding (parse)
 import qualified Text.Parsec
-import           Text.Parsec.String
+import           Text.Parsec.Text
 
 -- helpers
 
-parse :: Parser a -> String -> Either ParseError a
+parse :: Parser a -> Text -> Either ParseError a
 parse p = Text.Parsec.parse p ""
 
-parseWithEof :: Parser a -> String -> Either ParseError a
+parseWithEof :: Parser a -> Text -> Either ParseError a
 parseWithEof p = Text.Parsec.parse (p <* eof) ""
 
-parseWithLeftOver :: Parser a -> String -> Either ParseError (a, String)
+parseWithLeftOver :: Parser a -> Text -> Either ParseError (a, String)
 parseWithLeftOver p = Text.Parsec.parse ((,) <$> p <*> leftOver) ""
                        where leftOver = manyTill anyToken eof
 
@@ -34,11 +37,13 @@ notTabChar = satisfy (/= '\t')
 isNotTabChar :: Char -> Bool
 isNotTabChar = (/= '\t')
 
-alphaNumField :: Parser String
-alphaNumField = many1 $ satisfy (\x -> isAlphaNum x && isNotTabChar x)
+-- alphaNumField :: Parser String
+-- alphaNumField = many1 $ satisfy (\x -> isAlphaNum x && isNotTabChar x)
 
-allButTabChar :: Parser String
-allButTabChar = many1 $ satisfy isNotTabChar 
+allButTabChar :: Parser Text
+allButTabChar = do
+                 chars <- many1 $ satisfy isNotTabChar
+                 pure $ pack chars
 
 digitField :: Parser Int
 digitField = do
