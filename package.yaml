@@ -25,6 +25,11 @@ dependencies:
 - shh
 - text
 - witch
+- parsec
+- utf8-string
+- prettyprinter
+- prettyprinter-ansi-terminal
+
 
 library:
   source-dirs: src
