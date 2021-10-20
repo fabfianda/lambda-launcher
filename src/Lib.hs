@@ -18,6 +18,11 @@ main = do
    case eSinks of
      Right sinks -> do
         sink <- prettyPickItem sinks
-        print sink
+        case sink of
+          Just sink -> do
+                       vol <- getSinkVolume sink
+                       print vol
+          _         -> print "nothing to see here"
+
 
      Left e -> print e
