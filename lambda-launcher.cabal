@@ -30,6 +30,7 @@ library
       Lib.PulseAudio
       Lib.PulseAudio.Ctl
       Lib.PulseAudio.Types
+      Lib.Rofi
   other-modules:
       Paths_lambda_launcher
   hs-source-dirs:
