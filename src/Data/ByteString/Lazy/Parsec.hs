@@ -49,6 +49,11 @@ boolField = (== "yes") <$> (string "yes" <|> string "no")
 whitespace :: Parser ()
 whitespace = void $ many $ oneOf " \n\t"
 
+number :: Parser Int
+number = do
+               num <- many1 $ satisfy isDigit
+               pure $ read num
+
 trimWSstart :: Parser a -> Parser a
 trimWSstart parser = whitespace *> parser
 
