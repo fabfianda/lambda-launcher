@@ -1,9 +1,9 @@
+{-# LANGUAGE AllowAmbiguousTypes  #-}
 {-# LANGUAGE ExtendedDefaultRules #-}
 {-# LANGUAGE OverloadedStrings    #-}
 {-# LANGUAGE RecordWildCards      #-}
 {-# LANGUAGE TemplateHaskell      #-}
 {-# LANGUAGE TypeApplications     #-}
-{-# LANGUAGE AllowAmbiguousTypes     #-}
 
 module Lib.PulseAudio.Ctl where
 
@@ -33,6 +33,7 @@ newSinkVolume :: (Command t) => Int -> Int -> t
 newSinkVolume sinkId vol = pactl "set-sink-volume" sinkId (show vol <> "%")
 
 -- API
+
 getSinksList :: (Shell f, Monad f) => f (Either ParseError [Sink])
 getSinksList = do
         sinks <- listShortSinks |> captureLines
@@ -47,10 +48,12 @@ getSinkVolume Sink{..} = do
 setSinkVolume :: (Command t) => Sink -> Int -> t
 setSinkVolume Sink{..} = newSinkVolume sinkId
 
--- fadeSinkVolume :: p -> p1 -> Sink -> m ()
-fadeSinkVolume from to sink = forM_ [from..to] (\v -> setSinkVolume sink v >> sleep "0.2" )
+
+-- fadeSinkVolume :: (Monad m) => Int -> Int -> Int -> Sink -> m ()
+fadeSinkVolume step from to sink = forM_ (ramp step from to) (\v -> setSinkVolume sink v >> sleep "0.2" )
 
 -- Parser
+
 sinkParser :: Parser Sink
 sinkParser = Sink <$> tabbedDigitField
                   <*> tabbedTextField
@@ -68,6 +71,12 @@ sinkStatusParser = do
           "IDLE"      -> SinkIdle
           "RUNNING"   -> SinkRunning
           _           -> SinkStatusUnknown
+
+-- Helpers
+
+ramp :: (Enum a, Ord a, Num a) => a -> a -> a -> [a]
+ramp step from to = if to - from > 0 then [from,from+step..to] else [from,from-step..to]
+
 
 -- Conversions
 
