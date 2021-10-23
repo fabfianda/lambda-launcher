@@ -2,19 +2,19 @@
 {-# LANGUAGE OverloadedStrings    #-}
 {-# LANGUAGE TemplateHaskell      #-}
 
-module Lib
-    ( main
-    ) where
+module Action
+     where
 
+import           Data.Either
+import           Data.Functor
 import           Lib.PulseAudio.Ctl
-import Data.Functor
 import           Lib.Rofi
+import           Option
 import           Shh
-import Data.Either
 
 
-main :: IO ()
-main = do
+setSinkVolume :: IO ()
+setSinkVolume = do
    initInteractive
    eSinks <- getSinksList
    case eSinks of
@@ -36,11 +36,3 @@ main = do
 
 
      Left e -> print e
-
--- alt :: IO ()
--- alt = do
---    initInteractive
---    sink <- getSinksList >>= (\eSinks -> do 
---                                          sink <- prettyPickItem "Sinks" eSinks
---                                          pure sink
---                             )

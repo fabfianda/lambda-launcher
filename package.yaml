@@ -28,7 +28,10 @@ dependencies:
 - parsec
 - utf8-string
 - prettyprinter
-- prettyprinter-ansi-terminal
+- optparse-applicative
+- transformers
+- mtl
+- exceptions
 
 
 library:

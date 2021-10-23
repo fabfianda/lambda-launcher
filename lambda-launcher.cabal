@@ -24,13 +24,22 @@ source-repository head
 
 library
   exposed-modules:
+      Action
+      App
+      App.Env
+      Controller
       Data.ByteString.Lazy.Parsec
       Data.ByteString.Lazy.Utils
-      Lib
+      Exe
       Lib.PulseAudio
       Lib.PulseAudio.Ctl
       Lib.PulseAudio.Types
       Lib.Rofi
+      Option
+      Option.Command
+      Option.Command.Rofi
+      Option.Parser
+      Option.Types
   other-modules:
       Paths_lambda_launcher
   hs-source-dirs:
@@ -38,11 +47,14 @@ library
   build-depends:
       base >=4.7 && <5
     , bytestring
+    , exceptions
+    , mtl
+    , optparse-applicative
     , parsec
     , prettyprinter
-    , prettyprinter-ansi-terminal
     , shh
     , text
+    , transformers
     , utf8-string
     , witch
   default-language: Haskell2010
@@ -57,12 +69,15 @@ executable lambda-launcher-exe
   build-depends:
       base >=4.7 && <5
     , bytestring
+    , exceptions
     , lambda-launcher
+    , mtl
+    , optparse-applicative
     , parsec
     , prettyprinter
-    , prettyprinter-ansi-terminal
     , shh
     , text
+    , transformers
     , utf8-string
     , witch
   default-language: Haskell2010
@@ -78,12 +93,15 @@ test-suite lambda-launcher-test
   build-depends:
       base >=4.7 && <5
     , bytestring
+    , exceptions
     , lambda-launcher
+    , mtl
+    , optparse-applicative
     , parsec
     , prettyprinter
-    , prettyprinter-ansi-terminal
     , shh
     , text
+    , transformers
     , utf8-string
     , witch
   default-language: Haskell2010
