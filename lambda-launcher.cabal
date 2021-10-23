@@ -59,7 +59,7 @@ library
     , witch
   default-language: Haskell2010
 
-executable lambda-launcher-exe
+executable llc
   main-is: Main.hs
   other-modules:
       Paths_lambda_launcher
