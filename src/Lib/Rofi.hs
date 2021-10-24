@@ -44,3 +44,6 @@ pickItem title render items = do
 
 prettyPickItem :: (Pretty a) => String -> [a] -> IO (Maybe a)
 prettyPickItem title = pickItem title prettyRenderer
+
+rawPickItem :: (Show a) => String -> [a] -> IO (Maybe a)
+rawPickItem title = pickItem title basicRenderer
