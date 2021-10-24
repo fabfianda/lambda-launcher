@@ -13,5 +13,5 @@ runController :: App ()
 runController = do
         Env{..} <- ask
         case envOptions of
-          (GlobalOpts (RofiVerb "set-sink-volume") ) -> inApp setSinkVolume 
-          _ -> inApp $ print "OOF"
+          (GlobalOpts (RofiVerb SetSinkVolume) ) -> inApp setSinkVolume 
+          (GlobalOpts (RofiVerb AllActions) ) -> inApp pickAction 

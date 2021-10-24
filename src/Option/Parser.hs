@@ -9,9 +9,18 @@ cmdRofiVerb :: Mod CommandFields CmdVerb
 cmdRofiVerb = command
                 "rofi"
                    (info
-                      (RofiVerb <$> strArgument (metavar "ACTION" <> help "Action to perform" ))
+                      (RofiVerb <$> parseAction)
                       (header "Rofi powered actions")
                    )
+
+
+parseAction :: Parser Action
+parseAction = subparser
+       ( command "set-sink-volume"
+         (info (pure SetSinkVolume) (progDesc "Set sink volume"))
+      <> command "all"
+         (info (pure AllActions) (progDesc "Pick from a list"))
+       )
 
 parseAllCmdVerbs :: Parser CmdVerb
 parseAllCmdVerbs = hsubparser cmdRofiVerb

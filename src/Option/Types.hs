@@ -4,4 +4,6 @@ import           Data.Text
 
 newtype GlobalOpts = GlobalOpts {cmdVerb :: CmdVerb} deriving (Show)
 
-newtype CmdVerb = RofiVerb {optAction :: Text} deriving (Show)
+data Action = AllActions | SetSinkVolume deriving (Show, Eq,  Ord)
+
+newtype CmdVerb = RofiVerb {optAction :: Action} deriving (Show)
