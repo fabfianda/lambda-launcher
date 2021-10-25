@@ -5,8 +5,10 @@
 module Action
      where
 
+import           Control.Monad
 import           Data.Either
 import           Data.Functor
+import           Data.Maybe
 import qualified Lib.PulseAudio.Ctl as Ctl
 import           Lib.Rofi
 import           Option
@@ -17,30 +19,26 @@ import           Shh
 setSinkVolume :: IO ()
 setSinkVolume = do
    initInteractive
+
    eSinks <- Ctl.getSinksList
-   case eSinks of
-     Right sinks -> do
-        sink <- prettyPickItem "Sinks" sinks
-        case sink of
-          Just sink -> do
-                       vol <- Ctl.getSinkVolume sink
-                       case vol of
-                         Right vol -> do
-                                 newVol <- prettyPickItem ("Volume [" ++ show vol ++ "]") (Ctl.ramp 5 0 100)
-                                 case newVol of
-                                   Just newVol -> Ctl.fadeSinkVolume 5 vol newVol sink
-                                   Nothing     -> print "nothing to do here"
+   unless (isRight eSinks) (error "Sinks unavailable")
 
-                         Left e -> print "Volume fetch error"
+   mSink <- prettyPickItem "Sinks" (fromRight [] eSinks)
+   guard (isJust mSink)
 
-          _         -> print "nothing to see here"
-     Left e -> print e
+   vol <- Ctl.getSinkVolume (fromJust mSink)
+   unless (isRight vol) (error "Could not determine current volume")
+
+   newVol <- prettyPickItem ("Volume [" ++ show (fromRight 0 vol) ++ "]") (Ctl.ramp 5 0 100)
+   guard (isJust newVol)
+
+   Ctl.fadeSinkVolume 5 (fromRight 0 vol) (fromJust newVol) (fromJust mSink)
 
 pickAction :: IO ()
 pickAction = do
    initInteractive
    let actions = [SetSinkVolume]
-   action <- rawPickItem "Sinks" actions
+   action <- rawPickItem "Choose an action" actions
    case action of
      Just SetSinkVolume -> setSinkVolume
      Just AllActions    -> error "something odd"
