@@ -1,5 +1,6 @@
 module Option.Parser where
 
+import           App.Types
 import           Option.Types
 import           Options.Applicative
 

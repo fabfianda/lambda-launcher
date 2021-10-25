@@ -27,6 +27,7 @@ library
       Action
       App
       App.Env
+      App.Types
       Controller
       Data.ByteString.Lazy.Parsec
       Data.ByteString.Lazy.Utils
@@ -35,6 +36,7 @@ library
       Lib.PulseAudio.Ctl
       Lib.PulseAudio.Types
       Lib.Rofi
+      Lib.X11.Backlight
       Option
       Option.Command
       Option.Command.Rofi
