@@ -24,8 +24,18 @@ parseWithLeftOver :: Parser a -> ByteString -> Either ParseError (a, String)
 parseWithLeftOver p = Text.Parsec.parse ((,) <$> p <*> leftOver) ""
                        where leftOver = manyTill anyToken eof
 
+doubleLineBreak :: Parser String
+doubleLineBreak = string ['\n','\n']
+
+
+parseWithDoubleLineBreak :: Parser a -> ByteString -> Either ParseError a
+parseWithDoubleLineBreak p = Text.Parsec.parse (p <* notFollowedBy doubleLineBreak) ""
+
 tabChar :: Parser Char
 tabChar = satisfy (== '\t')
+
+newLine :: Parser Char
+newLine = satisfy (== '\n')
 
 notTabChar :: Parser Char
 notTabChar = satisfy (/= '\t')
@@ -33,10 +43,19 @@ notTabChar = satisfy (/= '\t')
 isNotTabChar :: Char -> Bool
 isNotTabChar = (/= '\t')
 
+isNotNewLine :: Char -> Bool
+isNotNewLine = (/= '\n')
+
 allButTabChar :: Parser Text
 allButTabChar = do
                  chars <- many1 $ satisfy isNotTabChar
                  pure $ Data.Text.pack chars
+
+allButNewLine :: Parser Text
+allButNewLine = do
+                 chars <- many1 $ satisfy isNotNewLine
+                 pure $ Data.Text.pack chars
+
 
 digitField :: Parser Int
 digitField = do
