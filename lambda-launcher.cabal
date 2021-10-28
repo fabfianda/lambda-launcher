@@ -30,6 +30,7 @@ library
       App.Types
       Controller
       Data.ByteString.Lazy.Parsec
+      Data.ByteString.Lazy.Parser
       Data.ByteString.Lazy.Utils
       Exe
       Lib.PulseAudio
@@ -50,6 +51,7 @@ library
       base >=4.7 && <5
     , bytestring
     , exceptions
+    , megaparsec
     , mtl
     , optparse-applicative
     , parsec
@@ -73,6 +75,7 @@ executable llc
     , bytestring
     , exceptions
     , lambda-launcher
+    , megaparsec
     , mtl
     , optparse-applicative
     , parsec
@@ -88,6 +91,7 @@ test-suite lambda-launcher-test
   type: exitcode-stdio-1.0
   main-is: Spec.hs
   other-modules:
+      Data.ByteString.Lazy.ParserSpec
       Paths_lambda_launcher
   hs-source-dirs:
       test
@@ -96,7 +100,9 @@ test-suite lambda-launcher-test
       base >=4.7 && <5
     , bytestring
     , exceptions
+    , hspec
     , lambda-launcher
+    , megaparsec
     , mtl
     , optparse-applicative
     , parsec

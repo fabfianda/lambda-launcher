@@ -26,6 +26,7 @@ dependencies:
 - text
 - witch
 - parsec
+- megaparsec
 - utf8-string
 - prettyprinter
 - optparse-applicative
@@ -58,3 +59,4 @@ tests:
     - -with-rtsopts=-N
     dependencies:
     - lambda-launcher
+    - hspec

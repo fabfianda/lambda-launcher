@@ -23,6 +23,8 @@ resolver:
 extra-deps:
   - shh-0.7.1.4@sha256:3cad21cec2f387aa315d9564fea13a2b141f1a461b452418aa595828030011d3,2275
 
+ghc-options:
+  "$everything": -haddock
 
 # User packages to be built.
 # Various formats can be used as shown in the example below.
