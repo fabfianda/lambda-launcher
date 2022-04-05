@@ -38,6 +38,7 @@ library
       Lib.PulseAudio.Types
       Lib.Rofi
       Lib.X11.Backlight
+      Lib.X11.XRandR
       Option
       Option.Command
       Option.Command.Rofi

@@ -12,7 +12,7 @@ import           Data.Functor
 import           Data.Maybe
 import qualified Lib.PulseAudio.Ctl as Ctl
 import           Lib.Rofi
-import qualified Lib.X11.Backlight  as XBacklight
+import qualified Lib.X11.XRandR     as XBacklight
 import           Option
 import           Option.Types
 import           Shh
@@ -40,10 +40,10 @@ setBacklightBrightness :: IO ()
 setBacklightBrightness = do
    initInteractive
 
-   newVal <- prettyPickItem "Brightness"  (Ctl.ramp 5 20 100)
+   newVal <- prettyPickItem "Brightness" [0,1]
    guard (isJust newVal)
 
-   XBacklight.setPercentage (fromJust newVal)
+   XBacklight.setBrightness "eDP-1" (fromJust newVal)
 
 pickAction :: IO ()
 pickAction = do
