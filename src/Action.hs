@@ -12,6 +12,7 @@ import           Data.Functor
 import           Data.Maybe
 import qualified Lib.PulseAudio.Ctl as Ctl
 import           Lib.Rofi
+import qualified Lib.X11.Backlight  as XBacklight
 import           Option
 import           Option.Types
 import           Shh
@@ -35,12 +36,22 @@ setSinkVolume = do
 
    Ctl.fadeSinkVolume 5 (fromRight 0 vol) (fromJust newVol) (fromJust mSink)
 
+setBacklightBrightness :: IO ()
+setBacklightBrightness = do
+   initInteractive
+
+   newVal <- prettyPickItem "Brightness"  (Ctl.ramp 5 20 100)
+   guard (isJust newVal)
+
+   XBacklight.setPercentage (fromJust newVal)
+
 pickAction :: IO ()
 pickAction = do
    initInteractive
-   let actions = [SetSinkVolume]
+   let actions = [SetSinkVolume, SetBacklightBrightness]
    action <- rawPickItem "Choose an action" actions
    case action of
-     Just SetSinkVolume -> setSinkVolume
-     Just AllActions    -> error "something odd"
-     Nothing            -> print "nothing to see here"
+     Just SetSinkVolume          -> setSinkVolume
+     Just SetBacklightBrightness -> setBacklightBrightness
+     Just AllActions             -> error "something odd"
+     Nothing                     -> print "nothing to see here"

@@ -19,6 +19,8 @@ parseAction :: Parser Action
 parseAction = subparser
        ( command "set-sink-volume"
          (info (pure SetSinkVolume) (progDesc "Set sink volume"))
+      <> command "set-backlight-brightness"
+         (info (pure SetBacklightBrightness) (progDesc "Set backlight brightness"))
       <> command "all"
          (info (pure AllActions) (progDesc "Pick from a list"))
        )
